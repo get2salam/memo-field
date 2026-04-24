@@ -4,45 +4,37 @@ Capture notes with context, signal, and next action before they dissolve.
 
 ![Memo Field preview](docs/preview.svg)
 
-Memo Field is a small local-first planning tool for solo builders, operators, and creative teams who want a cleaner way to manage memos. Add items, score the signal, track the friction, and keep the strongest opportunities visible without needing a backend or build step.
+Memo Field is a local-first workspace for founders, operators, and solo builders who want a cleaner way to manage memos. It keeps recall value, context, next action, and review timing visible so the right things move forward with less drift.
 
-## Features
+## What it does
 
-- Local-first persistence with `localStorage`
-- Search and filter controls
-- Ranked list sorted by signal minus friction
-- Inline editor for title, notes, type, status, score, and effort
-- Import/export JSON backups
-- Re-seed action for resetting the sample board
-- Keyboard shortcuts: `N` for new, `/` for search
-- No build tooling, just open in a browser
+- ranks memos by leverage, recall value, timing, and friction
+- tracks **context**, **next action**, **review date**, and **recall value** for each memo
+- highlights the best current bet, the next review slot, and the strongest signal on the board
+- renders a dedicated queue plus a category mix snapshot beneath the main board
+- saves locally in the browser with JSON import/export backups
+- quick action: **Link note**
+- quick action: **Raise recall value**
+- quick action: **Mark actioned**
+
+## Why it feels different
+
+Memo Field is not just a generic list. It is shaped around the real workflow behind memos, so the board helps you decide what matters next instead of simply storing records.
 
 ## Quick start
 
 ```bash
-git clone https://github.com/<you>/memo-field.git
+git clone https://github.com/get2salam/memo-field.git
 cd memo-field
 python -m http.server 8000
 ```
 
 Then open <http://localhost:8000>.
 
-## Data shape
+## Keyboard shortcuts
 
-```json
-{
-  "boardTitle": "Founder memo field",
-  "items": [
-    {
-      "title": "A product story beats a feature list",
-      "category": "Lesson",
-      "state": "Useful",
-      "score": 9,
-      "effort": 1
-    }
-  ]
-}
-```
+- `N` creates a new memo
+- `/` focuses the search box
 
 ## Privacy
 
