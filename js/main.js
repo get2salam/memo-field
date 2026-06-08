@@ -1,3 +1,5 @@
+import { clamp, daysFromToday, priority as scorePriority } from './scoring.js';
+
 const SPEC = {
   "slug": "memo-field",
   "title": "Memo Field",
@@ -200,13 +202,6 @@ function todayISO(offset = 0) {
   return date.toISOString().slice(0, 10);
 }
 
-function daysFromToday(value) {
-  if (!value) return 999;
-  const today = new Date(`${todayISO()}T00:00:00`);
-  const target = new Date(`${value}T00:00:00`);
-  return Math.round((target - today) / 86400000);
-}
-
 function bumpDate(value, days) {
   const date = new Date(`${value || todayISO()}T00:00:00`);
   date.setDate(date.getDate() + days);
@@ -226,16 +221,15 @@ function escapeHtml(value) {
     .replaceAll('"', '&quot;');
 }
 
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, Number(value)));
-}
-
 function completedStates() {
   return new Set(SPEC.completedStates || []);
 }
 
-function stateWeight(state) {
-  return (SPEC.stateWeights || {})[state] ?? 0;
+function priority(item) {
+  return scorePriority(item, {
+    stateWeights: SPEC.stateWeights,
+    completedStates: SPEC.completedStates,
+  });
 }
 
 function toneForDate(item) {
@@ -260,12 +254,6 @@ function normalize(item = {}) {
     textTwo: item.textTwo || SPEC.textTwo.default,
     date: item.date || todayISO(3),
   };
-}
-
-function priority(item) {
-  const completed = completedStates().has(item.state);
-  const dueBoost = completed ? 0 : Math.max(0, 4 - Math.max(daysFromToday(item.date), 0)) * 4;
-  return item.score * 6 + item.metric * 5 + dueBoost + stateWeight(item.state) - item.effort * 4;
 }
 
 function seedState() {

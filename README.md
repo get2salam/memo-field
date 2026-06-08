@@ -36,6 +36,16 @@ Then open <http://localhost:8000>.
 - `N` creates a new memo
 - `/` focuses the search box
 
+## Verify locally
+
+The scoring helpers behind the priority ranking live in `js/scoring.js` and are covered by a small `node:test` suite. No dependencies required — Node 18+ ships everything needed:
+
+```bash
+npm test
+```
+
+The suite pins a fake "today" so the due-date boost is deterministic and exercises the score, recall value, friction, due-date, completed-state, and unknown-state branches of `priority()`.
+
 ## Privacy
 
 Everything stays in your browser unless you export a JSON backup.
