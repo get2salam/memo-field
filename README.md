@@ -41,8 +41,10 @@ Then open <http://localhost:8000>.
 The scoring helpers behind the priority ranking live in `js/scoring.js` and are covered by a small `node:test` suite. No dependencies required — Node 18+ ships everything needed:
 
 ```bash
-npm test
+npm run verify
 ```
+
+`npm run verify` first checks that the static assets referenced from `index.html` exist, then runs the scoring regression suite. Use `npm test` when you only want the Node test suite.
 
 The suite pins a fake "today" so the due-date boost is deterministic and exercises the score, recall value, friction, due-date, completed-state, and unknown-state branches of `priority()`.
 

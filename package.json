@@ -5,7 +5,9 @@
   "description": "Local-first notes workspace with context, next action, recall value, and revisit timing.",
   "type": "module",
   "scripts": {
+    "check:assets": "node scripts/check-static-assets.mjs",
     "test": "node --test \"tests/**/*.test.mjs\"",
+    "verify": "npm run check:assets && npm test",
     "start": "python3 -m http.server 8000"
   },
   "engines": {
