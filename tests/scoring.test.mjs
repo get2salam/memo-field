@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { clamp, daysFromToday, priority } from '../js/scoring.js';
+import { clamp, daysFromToday, priority, priorityBreakdown } from '../js/scoring.js';
 
 const CONFIG = {
   stateWeights: { Fresh: 4, Linked: 8, Actioned: 3, Archived: 1 },
@@ -55,4 +55,30 @@ test('priority skips the due-soon boost for completed memos', () => {
 test('priority falls back to zero state weight for unknown states', () => {
   const item = { score: 5, effort: 3, metric: 5, state: 'Mystery', date: '2030-01-01' };
   assert.equal(priority(item, CONFIG), 5 * 6 + 5 * 5 - 3 * 4);
+});
+
+test('priorityBreakdown exposes deterministic audit components for a memo', () => {
+  const item = { score: 6, effort: 2, metric: 7, state: 'Linked', date: '2026-01-12' };
+  const breakdown = priorityBreakdown(item, CONFIG);
+
+  assert.deepEqual(breakdown, {
+    total: 79,
+    scoreImpact: 36,
+    recallImpact: 35,
+    dueBoost: 8,
+    stateImpact: 8,
+    frictionImpact: -8,
+    daysUntilReview: 2,
+    completed: false,
+    overdue: false,
+  });
+  assert.equal(priority(item, CONFIG), breakdown.total);
+});
+
+test('priorityBreakdown flags overdue active memos without flagging completed memos', () => {
+  const stale = { score: 5, effort: 3, metric: 5, state: 'Fresh', date: '2026-01-05' };
+  const completed = { ...stale, state: 'Archived' };
+
+  assert.equal(priorityBreakdown(stale, CONFIG).overdue, true);
+  assert.equal(priorityBreakdown(completed, CONFIG).overdue, false);
 });

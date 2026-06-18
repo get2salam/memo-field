@@ -11,19 +11,33 @@ export function daysFromToday(value, today = new Date()) {
   return Math.round((target - anchor) / 86400000);
 }
 
-export function priority(item, config = {}) {
+export function priorityBreakdown(item, config = {}) {
   const stateWeights = config.stateWeights || {};
   const completedStates = new Set(config.completedStates || []);
   const today = config.today || new Date();
   const completed = completedStates.has(item.state);
+  const daysUntilReview = daysFromToday(item.date, today);
   const dueBoost = completed
     ? 0
-    : Math.max(0, 4 - Math.max(daysFromToday(item.date, today), 0)) * 4;
-  return (
-    item.score * 6 +
-    item.metric * 5 +
-    dueBoost +
-    (stateWeights[item.state] ?? 0) -
-    item.effort * 4
-  );
+    : Math.max(0, 4 - Math.max(daysUntilReview, 0)) * 4;
+  const scoreImpact = item.score * 6;
+  const recallImpact = item.metric * 5;
+  const stateImpact = stateWeights[item.state] ?? 0;
+  const frictionImpact = item.effort * -4;
+
+  return {
+    total: scoreImpact + recallImpact + dueBoost + stateImpact + frictionImpact,
+    scoreImpact,
+    recallImpact,
+    dueBoost,
+    stateImpact,
+    frictionImpact,
+    daysUntilReview,
+    completed,
+    overdue: !completed && daysUntilReview < 0,
+  };
+}
+
+export function priority(item, config = {}) {
+  return priorityBreakdown(item, config).total;
 }
