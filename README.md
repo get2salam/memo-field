@@ -50,6 +50,23 @@ The suite pins a fake "today" so the due-date boost is deterministic and exercis
 
 For agent/evaluation integrations, `priorityBreakdown()` returns the exact score components (`scoreImpact`, `recallImpact`, `dueBoost`, `stateImpact`, and `frictionImpact`) plus `completed`/`overdue` flags. That makes memo ranking auditable without reimplementing the browser scoring rules.
 
+## Runnable priority audit example
+
+Use the bundled example when you want to explain why one memo outranks another without opening the browser. It imports the same scoring helper used by the app, pins a deterministic review date, ranks three sample memos, and includes assertions that fail if the expected top memo or completed-state handling changes:
+
+```bash
+npm run example:priority
+```
+
+Expected output starts with:
+
+```text
+Memo priority audit
+1. Discovery-call wording: total=95 (score=48, recall=35, due=16, state=4, friction=-8)
+```
+
+Adapt `examples/priority-audit.mjs` for evaluation notes, screenshots, or support debugging when a saved backup needs a transparent score explanation.
+
 ## Privacy
 
 Everything stays in your browser unless you export a JSON backup.

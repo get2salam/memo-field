@@ -7,6 +7,7 @@
   "scripts": {
     "check:assets": "node scripts/check-static-assets.mjs",
     "check:workflow": "node scripts/check-developer-workflow.mjs",
+    "example:priority": "node examples/priority-audit.mjs",
     "test": "node --test tests/*.test.mjs",
     "verify": "npm run check:assets && npm run check:workflow && npm test",
     "start": "python3 -m http.server 8000"
