@@ -44,7 +44,7 @@ The scoring helpers behind the priority ranking live in `js/scoring.js` and are 
 npm run verify
 ```
 
-`npm run verify` first checks that the static assets referenced from `index.html` exist, confirms the package scripts and GitHub Actions workflow still point at the same local verification contract, then runs the scoring regression suite. Use `npm test` when you only want the Node test suite.
+`npm run verify` checks that the static assets referenced from `index.html` exist, confirms the package scripts and GitHub Actions workflow still point at the same local verification contract, validates that the app's `SPEC` config in `js/main.js` is internally consistent (every `stateWeights`, `completedStates`, action target, and seed item references a real state or category, and the recall-value `metric` bounds make sense), then runs the scoring regression suite. Use `npm test` when you only want the Node test suite, or `npm run check:spec` on its own after editing `SPEC` to catch config drift immediately.
 
 The suite pins a fake "today" so the due-date boost is deterministic and exercises the score, recall value, friction, due-date, completed-state, and unknown-state branches of `priority()`.
 

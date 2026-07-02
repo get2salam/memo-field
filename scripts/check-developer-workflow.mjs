@@ -23,12 +23,16 @@ expect(scripts['check:assets'] === 'node scripts/check-static-assets.mjs',
   'package.json must keep check:assets wired to the static asset verifier.');
 expect(scripts['check:workflow'] === 'node scripts/check-developer-workflow.mjs',
   'package.json must expose check:workflow for CI contract checks.');
+expect(scripts['check:spec'] === 'node scripts/check-app-spec.mjs',
+  'package.json must expose check:spec for SPEC consistency checks.');
 expect(scripts.test === 'node --test tests/*.test.mjs',
   'npm test must use an unquoted node:test glob: node --test tests/*.test.mjs');
 expect(scripts.verify?.includes('npm run check:assets'),
   'npm run verify must include the static asset check.');
 expect(scripts.verify?.includes('npm run check:workflow'),
   'npm run verify must include the workflow contract check.');
+expect(scripts.verify?.includes('npm run check:spec'),
+  'npm run verify must include the SPEC consistency check.');
 expect(scripts.verify?.includes('npm test'),
   'npm run verify must include the Node regression suite.');
 
